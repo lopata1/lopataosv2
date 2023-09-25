@@ -1,0 +1,9 @@
+bin/*
+!bin/.gitkeep
+build/*
+!build/.gitkeep
+!build/ints
+build/ints/*
+!build/ints/.gitkeep
+bochsrc.bxrc
+.vscode/
