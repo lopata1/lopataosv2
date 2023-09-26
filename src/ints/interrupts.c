@@ -61,6 +61,7 @@ void timer_init()
 void timer_isr()
 {
     timer_ms_passed++;
+    cursor_blink_passed_ms++;
     return;
 }
 

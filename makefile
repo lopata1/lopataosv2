@@ -15,7 +15,7 @@ ASMSOURCES := ints/isr_error.asm ints/stubs.asm
 COBJECTS := $(patsubst %.c, $(BUILD_DIR)/%.o, $(CSOURCES))
 ASMOBJECTS := $(patsubst %.asm, $(BUILD_DIR)/%.o, $(ASMSOURCES))
 
-all: $(ASMOBJECTS) $(COBJECTS) $(BUILD_DIR)/bootloader.bin $(BUILD_DIR)/kentry.o $(BUILD_DIR)/kernel.bin $(BIN_DIR)/os.bin
+all: $(ASMOBJECTS) $(COBJECTS) $(BUILD_DIR)/bootloader.bin $(BUILD_DIR)/kentry.o
 	$(LD) $(LDFLAGS) $(BUILD_DIR)/kentry.o $(ASMOBJECTS) $(COBJECTS) -o $(BUILD_DIR)/kernel.bin
 	cat $(BUILD_DIR)/bootloader.bin $(BUILD_DIR)/kernel.bin > $(BIN_DIR)/os.bin
 

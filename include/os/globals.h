@@ -14,6 +14,7 @@ extern const uint8_t kbmap[129];
 
 extern char last_key_pressed;
 extern uint8_t changed_input;
+extern uint16_t cursor_blink_passed_ms;
 
 
 #endif
