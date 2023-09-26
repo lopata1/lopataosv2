@@ -32,9 +32,9 @@ void kmain()
 
 void poll_events()
 {
-    if(changed_input && last_key_pressed)
+    if(input_pressed && last_key_pressed)
     {
-        changed_input = 0;
+        input_pressed = 0;
         prompt_handle_input(last_key_pressed);
     }
     if(cursor_blink_passed_ms > 100)

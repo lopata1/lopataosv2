@@ -13,7 +13,9 @@ extern uint16_t cursor_position;
 extern const uint8_t kbmap[129];
 
 extern char last_key_pressed;
-extern uint8_t changed_input;
+extern char last_key_released;
+extern uint8_t input_pressed;
+extern uint8_t input_released;
 extern uint16_t cursor_blink_passed_ms;
 
 extern char prompt_input_buffer[256];

@@ -81,9 +81,14 @@ void keyboard_init()
 void keyboard_isr()
 {
     uint8_t scancode = inb(0x60);
-    if(scancode > 129) return;
+    if(scancode > 128) 
+    {
+        last_key_released = kbmap[scancode-128];
+        input_released = 1;
+        return;
+    }
     last_key_pressed = kbmap[scancode];
-    changed_input = 1;
+    input_pressed = 1;
 
     return;
 }
