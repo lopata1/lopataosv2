@@ -9,7 +9,7 @@ SRC_DIR := src
 BUILD_DIR := build
 BIN_DIR := bin
 
-CSOURCES := kernel.c ints/interrupts.c output.c globals.c
+CSOURCES := kernel.c ints/interrupts.c output.c globals.c prompt.c string.c
 ASMSOURCES := ints/isr_error.asm ints/stubs.asm
 
 COBJECTS := $(patsubst %.c, $(BUILD_DIR)/%.o, $(CSOURCES))

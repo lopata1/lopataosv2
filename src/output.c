@@ -3,6 +3,7 @@
 #include <os/characters.h>
 
 #define TEXT_WIDTH 40
+#define TEXT_HEIGHT 20
 #define FONT_HEIGHT 7
 
 static const char cursor_c_map[7][5] =
@@ -29,13 +30,29 @@ void printc(char c, uint8_t color)
     {
         display_c_map(characters[0], 15, cursor_position);
         cursor_position = (cursor_position + TEXT_WIDTH) / TEXT_WIDTH * TEXT_WIDTH;
-        display_c_map(cursor_c_map, 15, cursor_position);
-        return;
     }
+    else
+    {
+        display_c_map(characters[c], color, cursor_position++);
+    }
+    
 
-    display_c_map(characters[c], color, cursor_position++);
+    if(cursor_position >= TEXT_WIDTH * TEXT_HEIGHT) shift_text_up();
     display_c_map(cursor_c_map, 15, cursor_position);
     return;
+}
+
+void shift_text_up()
+{
+    for(int i = 0; i < screen_width*screen_height-screen_width*(FONT_HEIGHT+2); i++)
+    {
+        *(video_mem + i) = *(video_mem + i + screen_width*(FONT_HEIGHT+2));
+    }
+    for(int i = screen_width*screen_height-screen_width*(FONT_HEIGHT+2); i < screen_width*screen_height; i++)
+    {
+        *(video_mem + i) = background_color;
+    }
+    cursor_position = TEXT_WIDTH*(TEXT_HEIGHT-1);
 }
 
 

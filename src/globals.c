@@ -27,3 +27,5 @@ const uint8_t kbmap[129] = {
 char last_key_pressed = 0;
 uint8_t changed_input = 0;
 uint16_t cursor_blink_passed_ms = 0;
+
+char prompt_input_buffer[256];

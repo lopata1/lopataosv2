@@ -16,5 +16,7 @@ extern char last_key_pressed;
 extern uint8_t changed_input;
 extern uint16_t cursor_blink_passed_ms;
 
+extern char prompt_input_buffer[256];
+
 
 #endif

@@ -8,5 +8,6 @@ void printc(char c, uint8_t color);
 void prints(char* str, uint8_t color);
 void display_c_map(const char c_map[7][5], uint8_t color, uint16_t pos);
 void blink_cursor();
+void shift_text_up();
 
 #endif

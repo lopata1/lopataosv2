@@ -2,6 +2,7 @@
 #include <os/ints/interrupts.h>
 #include <os/globals.h>
 #include <os/utils.h>
+#include <os/prompt.h>
 
 
 void poll_events();
@@ -34,7 +35,7 @@ void poll_events()
     if(changed_input && last_key_pressed)
     {
         changed_input = 0;
-        printc(last_key_pressed, 7);
+        prompt_handle_input(last_key_pressed);
     }
     if(cursor_blink_passed_ms > 100)
     {
