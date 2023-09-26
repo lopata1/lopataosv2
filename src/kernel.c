@@ -11,7 +11,7 @@ void kmain()
 
     fill_screen(20);
 
-    prints("LOPATA OS 20!", 15);
+    prints("LOPATA OS 20!", 15); // TODO: dodati tacku
 
 
     while(1)
