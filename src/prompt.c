@@ -3,6 +3,7 @@
 #include <os/globals.h>
 #include <os/string.h>
 #include <os/pong/pong.h>
+#include <os/characters.h>
 
 static uint8_t input_buffer_pos = 0;
 
@@ -19,6 +20,15 @@ void prompt_handle_input(char key)
         prints("KOMANDA>", 15);
         return;
     }
+    else if(key == 8 && input_buffer_pos != 0) // backspace
+    {
+        prompt_input_buffer[--input_buffer_pos] = 0;
+        display_c_map(characters[' '], 15, cursor_position);
+        cursor_position -= 1;
+        return;
+    }
+
+    if(key == 8) return;
 
     prompt_input_buffer[input_buffer_pos++] = key;
 
