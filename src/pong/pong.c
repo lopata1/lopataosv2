@@ -118,7 +118,14 @@ static void start_new_game()
 
 static void update_score_text()
 {
-    score_text.content[2] = score[0] + '0';
+    char* text_start = score_text.content+2;
+
+    for(int i = 0; i < 3; i++)
+    {
+        text_start[i] = (score[0] / pow(10, 2-i)) % 10 + '0';
+    }
+
+    //score_text.content[2] = score[0] + '0';
     score_text.content[6] = score[1] + '0';
 }
 
