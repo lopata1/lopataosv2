@@ -13,3 +13,14 @@ uint32_t pow(uint32_t n, uint32_t e)
     for(int i = 1; i < e; i++) res *= n;
     return res;
 }
+
+uint32_t log10int(uint32_t n)
+{
+    uint32_t res;
+    while(n > 0)
+    {
+        n /= 10;
+        res++;
+    }
+    return res - 1;
+}

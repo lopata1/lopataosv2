@@ -5,5 +5,6 @@
 
 uint32_t abs(int32_t n);
 uint32_t pow(uint32_t n, uint32_t e);
+uint32_t log10int(uint32_t n);
 
 #endif
