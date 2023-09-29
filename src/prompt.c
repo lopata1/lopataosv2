@@ -2,6 +2,7 @@
 #include <os/output.h>
 #include <os/globals.h>
 #include <os/string.h>
+#include <os/pong/pong.h>
 
 static uint8_t input_buffer_pos = 0;
 
@@ -15,7 +16,7 @@ void prompt_handle_input(char key)
         input_buffer_pos = 0;
         prompt_input_buffer[0] = 0;
 
-        prints("KOMANDA ", 15);
+        prints("KOMANDA>", 15);
         return;
     }
 
@@ -34,6 +35,13 @@ void prompt_handle_command()
     {
         fill_screen(background_color);
         cursor_position = 0;
+    }
+    else if(streq("PONG", prompt_input_buffer))
+    {
+        uint8_t bg = background_color;
+        pong_start();
+        background_color = bg;
+        fill_screen(background_color);
     }
     else
     {

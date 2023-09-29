@@ -76,6 +76,11 @@ void keyboard_init()
 {
     outb(0x64, 0xFF);
     outb(0x60, 0xF4);
+
+
+    //outb(0x64, 0xF3);
+    //outb(0x60, 0b00000000);
+    //outb(0x60, 0xF4);
 }
 
 void keyboard_isr()

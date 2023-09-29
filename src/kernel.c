@@ -15,9 +15,9 @@ void kmain()
 
     fill_screen(20);
 
-    prints("             LOPATA OS 20!\n\n", 15); // TODO: dodati tacku
+    prints("             LOPATA OS 2.0!\n\n", 15);
     prints(" DOBRODOSLI!\n\n\n", 4);
-    prints("KOMANDA ", 15);
+    prints("KOMANDA>", 15);
 
 
     while(1)

@@ -5,5 +5,10 @@ build/*
 !build/ints
 build/ints/*
 !build/ints/.gitkeep
+
+!build/pong
+build/pong/*
+!build/pong/.gitkeep
+
 bochsrc.bxrc
 .vscode/

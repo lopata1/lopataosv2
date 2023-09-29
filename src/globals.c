@@ -1,8 +1,6 @@
 #include <os/globals.h>
 
 char* video_mem = (char*) 0xa0000;
-const uint16_t screen_height = 200;
-const uint16_t screen_width = 320;
 uint8_t background_color = 0;
 
 uint16_t cursor_position = 0;

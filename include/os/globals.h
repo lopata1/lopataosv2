@@ -1,13 +1,18 @@
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H_
 
+#define SCREEN_HEIGHT 200
+#define SCREEN_WIDTH 320
+#define TEXT_WIDTH 40
+#define TEXT_HEIGHT 20
+#define CHAR_HEIGHT 7
+#define CHAR_WIDTH 5
+#define CHARACTERS_SPACE 8
+
 #include <stdint.h>
 
 extern char* video_mem;
-extern const uint16_t screen_height;
-extern const uint16_t screen_width;
 extern uint8_t background_color;
-
 extern uint16_t cursor_position;
 
 extern const uint8_t kbmap[129];
