@@ -118,15 +118,22 @@ static void start_new_game()
 
 static void update_score_text()
 {
-    char* text_start = score_text.content+2;
+    char* text_start = score_text.content;
 
-    for(int i = 0; i < 3; i++)
+    uint32_t length = log10int(score[0]);
+
+    for(int i = 2 - length; i < 3; i++)
     {
         text_start[i] = (score[0] / pow(10, 2-i)) % 10 + '0';
     }
 
-    //score_text.content[2] = score[0] + '0';
-    score_text.content[6] = score[1] + '0';
+    length = log10int(score[1]);
+    text_start = score_text.content+6;
+
+    for(int i = 2 - length; i < 3; i++)
+    {
+        text_start[i-(2-length)] = (score[1] / pow(10, 2-i)) % 10 + '0';
+    }
 }
 
 static void draw()

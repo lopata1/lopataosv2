@@ -16,7 +16,7 @@ uint32_t pow(uint32_t n, uint32_t e)
 
 uint32_t log10int(uint32_t n)
 {
-    uint32_t res;
+    uint32_t res = 0;
     while(n > 0)
     {
         n /= 10;
