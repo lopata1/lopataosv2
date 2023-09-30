@@ -1,8 +1,9 @@
 #include <os/graphics.h>
 #include <os/globals.h>
 #include <os/characters.h>
+#include <os/memory.h>
 
-static uint8_t graphics_buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
+static uint8_t graphics_buffer[200][320];
 
 void draw_rectangle(rectangle_t rect)
 {
@@ -20,35 +21,43 @@ void draw_text(text_t text)
     int i = 0;
     while(text.content[i] != 0)
     {
-        draw_c_map(characters[text.content[i]], text.color, make_vector2d(text.position.x + i * CHARACTERS_SPACE, text.position.y));
+        vector2d_t position = make_vector2d(text.position.x + i * CHARACTERS_SPACE, text.position.y);
+        draw_c_map(characters[text.content[i]], text.color, text.bg_color, position);
         i++;
+        if(text.content[i] != 0)
+        {
+            position.x += CHAR_WIDTH;
+            for(int j = 0; j < 3; j++)
+            {
+                for(int k = 0; k < CHAR_HEIGHT; k++)
+                {
+                    graphics_buffer[position.y + k][position.x + j] = text.bg_color;
+                }
+            }
+        }
     }
     return;
 }
 
-void draw_c_map(const char c_map[7][5], uint8_t color, vector2d_t position)
+void draw_c_map(const char c_map[7][5], uint8_t color, uint8_t bg_color, vector2d_t position)
 {
     for(int i = 0; i < 7; i++)
     {
         for(int j = 0; j < 5; j++)
         {
-            graphics_buffer[i + position.y][j + position.x] = (c_map[i][j] * color) + (!c_map[i][j] * background_color); 
+            graphics_buffer[i + position.y][j + position.x] = (c_map[i][j] * color) + (!c_map[i][j] * bg_color); 
         }
     }
 }
 
-
-extern void memcpy(char* source, char* destination);
-extern void memset(char* destination, uint8_t value);
-
 void clear_buffer(uint8_t color)
 {
-    memset((char*)graphics_buffer, color);
+    memset((char*)graphics_buffer, color, SCREEN_WIDTH*SCREEN_HEIGHT);
 }
 
 void display_buffer()
 {
-    memcpy((char*)graphics_buffer, (char*)video_mem);
+    memcpy((char*)graphics_buffer, (char*)video_mem, SCREEN_WIDTH*SCREEN_HEIGHT);
 }
 
 
@@ -70,9 +79,9 @@ rectangle_t make_rectangle(vector2d_t position, vector2d_t size, uint8_t color)
     return r;
 }
 
-text_t make_text(char* content, vector2d_t position, uint8_t color)
+text_t make_text(char* content, vector2d_t position, uint8_t color, uint8_t bg_color)
 {
-    text_t t = {content, position, color};
+    text_t t = {content, position, color, bg_color};
     return t;
 }
 

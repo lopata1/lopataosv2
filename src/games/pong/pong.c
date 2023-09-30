@@ -1,9 +1,28 @@
+#include <os/games/pong/pong.h>
 #include <os/output.h>
 #include <os/utils.h>
 #include <os/graphics.h>
 #include <os/globals.h>
 #include <os/ints/interrupts.h>
 #include <os/math.h>
+
+
+#define QEMU
+
+#ifdef QEMU
+
+#define PLAYER_SPEED 150
+#define BALL_SPEED 100
+#define SPEED_INCREMENT 20
+
+#else
+
+#define PLAYER_SPEED 150/8
+#define BALL_SPEED 100/8
+#define SPEED_INCREMENT 20/10
+
+#endif
+
 
 static enum MOVEMENT {IDLE, UP, DOWN, LEFT, RIGHT};
 
@@ -37,7 +56,7 @@ static text_t play_again_text2;
 
 static float deltatime = 0;
 
-static uint32_t player_speed = 150;
+static uint32_t player_speed = PLAYER_SPEED; // 150
 
 static uint8_t game_over = 0;
 static uint8_t winner = 0;
@@ -93,12 +112,12 @@ static void init_pong()
 
     ball_obj = make_rectangle(make_vector2d(ball.position.x, ball.position.y), make_vector2d(4, 4), 15);
 
-    pong_text = make_text("PING PONG", make_vector2d(center_text_x(9), 30), 15);
-    score_text = make_text("  0 : 0  ", make_vector2d(center_text_x(9), 50), 15);
-    left_player_won_text = make_text("LIJEVI IGRAC POBJEDIO!", make_vector2d(center_text_x(22), 80), 15);
-    right_player_won_text = make_text("DESNI IGRAC POBJEDIO!", make_vector2d(center_text_x(21), 80), 15);
-    play_again_text1 = make_text("PRITISNITE SPACE DA", make_vector2d(center_text_x(19), 100), 15);
-    play_again_text2 = make_text("IGRATE PONOVO", make_vector2d(center_text_x(13), 120), 15);
+    pong_text = make_text("PING PONG", make_vector2d(center_text_x(9), 30), 15, 0);
+    score_text = make_text("  0 : 0  ", make_vector2d(center_text_x(9), 50), 15, 0);
+    left_player_won_text = make_text("LIJEVI IGRAC POBJEDIO!", make_vector2d(center_text_x(22), 80), 15, 0);
+    right_player_won_text = make_text("DESNI IGRAC POBJEDIO!", make_vector2d(center_text_x(21), 80), 15, 0);
+    play_again_text1 = make_text("PRITISNITE SPACE DA", make_vector2d(center_text_x(19), 100), 15, 0);
+    play_again_text2 = make_text("IGRATE PONOVO", make_vector2d(center_text_x(13), 120), 15, 0);
 }
 
 static void start_new_game()
@@ -110,8 +129,10 @@ static void start_new_game()
 
     ball.movement_x = (winner == 0) ? RIGHT : LEFT;
     ball.movement_y = UP;
-    ball.speed = 100;
+    ball.speed = BALL_SPEED;
     ball.position = make_vector2df(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+
+    player_speed = PLAYER_SPEED; // 150
 
     game_over = 0;
 }
@@ -139,12 +160,11 @@ static void update_score_text()
 static void draw()
 {
     clear_buffer(0);
-    background_color = 0;
+    draw_rectangle(ball_obj);
     draw_rectangle(wall_up);
     draw_rectangle(wall_down);
     draw_rectangle(player_left_obj);
     draw_rectangle(player_right_obj);
-    draw_rectangle(ball_obj);
     draw_text(pong_text);
     draw_text(score_text);
     if(game_over)
@@ -153,6 +173,7 @@ static void draw()
         draw_text(play_again_text1);
         draw_text(play_again_text2);
     }
+    draw_rectangle(ball_obj);
     display_buffer();
 }
 
@@ -180,8 +201,8 @@ static void handle_logic()
         update_score_text();
     }
 
-    ball_obj.position.x = ball.position.x;
-    ball_obj.position.y = ball.position.y;
+    ball_obj.position.x = (uint16_t)ball.position.x;
+    ball_obj.position.y = (uint16_t)ball.position.y;
     player_left_obj.position.y = player_left.position.y;
     player_right_obj.position.y = player_right.position.y;
 }
@@ -244,8 +265,8 @@ static void collision_check()
 
     if(ball_player_collision) 
     {
-        ball.speed += 20;
-        player_speed += 20;
+        ball.speed += SPEED_INCREMENT; // 20
+        player_speed += SPEED_INCREMENT; // 20
     }
     switch(collision_direction)
     {

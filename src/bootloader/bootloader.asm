@@ -7,6 +7,9 @@ mov ah, 0x0e
 int 0x10
 
 
+
+
+
 mov ax, 0x1000
 mov es, ax
 xor bx, bx
@@ -29,6 +32,14 @@ int 0x10
 
 
 cli
+
+in al, 0x92
+or al, 2
+out 0x92, al
+
+mov ax, 0
+mov ds, ax
+
 lgdt [gdtr]
 mov eax, cr0
 or al, 1

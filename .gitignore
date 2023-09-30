@@ -6,9 +6,15 @@ build/*
 build/ints/*
 !build/ints/.gitkeep
 
-!build/pong
-build/pong/*
-!build/pong/.gitkeep
+!build/games
+
+!build/games/pong
+build/games/pong/*
+!build/games/pong/.gitkeep
+
+!build/games/snake
+build/games/snake/*
+!build/games/snake/.gitkeep
 
 bochsrc.bxrc
 .vscode/

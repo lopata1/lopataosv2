@@ -5,7 +5,7 @@ memcpy:
     push ebp
     mov ebp, esp
 
-    mov ecx, 320*200
+    mov ecx, [ebp+16]
 
     mov esi, [ebp+8]
     mov edi, [ebp+12]
@@ -20,7 +20,7 @@ memset:
     push ebp
     mov ebp, esp
 
-    mov ecx, 320*200
+    mov ecx, [ebp+16]
 
     mov edi, [ebp+8]
     mov al, [ebp+12]

@@ -19,6 +19,9 @@ void kmain()
     prints(" DOBRODOSLI!\n\n\n", 4);
     prints("KOMANDA>", 15);
 
+    input_buffer_pos = 0;
+    prompt_input_buffer[0] = 0;
+    input_pressed = 0;
 
     while(1)
     {
@@ -37,7 +40,7 @@ void poll_events()
         input_pressed = 0;
         prompt_handle_input(last_key_pressed);
     }
-    if(cursor_blink_passed_ms > 100)
+    if(cursor_blink_passed_ms > 500)
     {
         blink_cursor();
         cursor_blink_passed_ms = 0;

@@ -2,13 +2,16 @@
 #include <os/output.h>
 #include <os/globals.h>
 #include <os/string.h>
-#include <os/pong/pong.h>
+#include <os/games/pong/pong.h>
+#include <os/games/snake/snake.h>
 #include <os/characters.h>
 
-static uint8_t input_buffer_pos = 0;
+uint8_t input_buffer_pos = 0;
 
 void prompt_handle_input(char key)
 {
+    if(key == 0) return;
+
     if(key == '\n')
     {
         printc('\n', 0);
@@ -48,10 +51,15 @@ void prompt_handle_command()
     }
     else if(streq("PONG", prompt_input_buffer))
     {
-        uint8_t bg = background_color;
         pong_start();
-        background_color = bg;
         fill_screen(background_color);
+        cursor_position = 0;
+    }
+    else if(streq("SNAKE", prompt_input_buffer))
+    {
+        snake_start();
+        fill_screen(background_color);
+        cursor_position = 0;
     }
     else
     {
