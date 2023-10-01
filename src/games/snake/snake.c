@@ -95,7 +95,7 @@ static void init_snake()
     wall_right = make_rectangle(make_vector2d(SCREEN_WIDTH-10, 0), make_vector2d(10, SCREEN_HEIGHT), 15);
 
     game_over_text1 = make_text("KRAJ IGRE!", make_vector2d(center_text_x(10), 30), 15, 0);
-    game_over_text2 = make_text("BODOVI: 000", make_vector2d(center_text_x(11), 50), 15, 0);
+    game_over_text2 = make_text("BODOVI: 0  ", make_vector2d(center_text_x(11), 50), 15, 0);
     game_over_text3 = make_text("PRITISNITE SPACE DA IGRATE PONOVO", make_vector2d(center_text_x(33), 70), 15, 0);
 }
 
