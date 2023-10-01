@@ -4,6 +4,7 @@
 #include <os/string.h>
 #include <os/games/pong/pong.h>
 #include <os/games/snake/snake.h>
+#include <os/games/test3d/test3d.h>
 #include <os/characters.h>
 
 uint8_t input_buffer_pos = 0;
@@ -58,6 +59,12 @@ void prompt_handle_command()
     else if(streq("SNAKE", prompt_input_buffer))
     {
         snake_start();
+        fill_screen(background_color);
+        cursor_position = 0;
+    }
+    else if(streq("TEST3D", prompt_input_buffer))
+    {
+        test3d_start();
         fill_screen(background_color);
         cursor_position = 0;
     }

@@ -39,5 +39,7 @@ text_t make_text(char* content, vector2d_t position, uint8_t color, uint8_t bg_c
 vector2df_t make_vector2df(float x, float y);
 uint16_t center_text_x(uint16_t text_length);
 uint16_t center_y(uint16_t size_y);
+void draw_line(vector2d_t point1, vector2d_t point2, uint8_t color);
+void draw_pixel(vector2d_t position, uint8_t color);
 
 #endif

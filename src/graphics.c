@@ -2,6 +2,7 @@
 #include <os/globals.h>
 #include <os/characters.h>
 #include <os/memory.h>
+#include <os/math.h>
 
 static uint8_t graphics_buffer[200][320];
 
@@ -93,4 +94,28 @@ uint16_t center_text_x(uint16_t text_length)
 uint16_t center_y(uint16_t size_y)
 {
     return (SCREEN_HEIGHT - size_y) / 2;
+}
+
+void draw_line(vector2d_t point1, vector2d_t point2, uint8_t color)
+{
+    int dx = point2.x - point1.x;
+    int dy = point2.y - point1.y;
+
+    int steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
+
+    float xi = (float) dx / steps;
+    float yi = (float) dy / steps;
+
+    float x = point1.x, y = point1.y;
+    for(int i = 0; i < steps; i++)
+    {
+        x += xi;
+        y += yi;
+        draw_pixel(make_vector2d((int)x, (int)y), color);
+    }
+}
+
+void draw_pixel(vector2d_t position, uint8_t color)
+{
+    graphics_buffer[position.y][position.x] = color;
 }

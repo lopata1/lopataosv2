@@ -16,5 +16,9 @@ build/games/pong/*
 build/games/snake/*
 !build/games/snake/.gitkeep
 
+!build/games/test3d
+build/games/test3d/*
+!build/games/test3d/.gitkeep
+
 bochsrc.bxrc
 .vscode/
