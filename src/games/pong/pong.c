@@ -11,15 +11,15 @@
 
 #ifdef QEMU
 
-#define PLAYER_SPEED 150
-#define BALL_SPEED 100
-#define SPEED_INCREMENT 20
+#define PLAYER_SPEED 120*1.6
+#define BALL_SPEED 100*1.6
+#define SPEED_INCREMENT 15*1.6
 
 #else
 
-#define PLAYER_SPEED 150/8
-#define BALL_SPEED 100/8
-#define SPEED_INCREMENT 20/10
+#define PLAYER_SPEED 120
+#define BALL_SPEED 100
+#define SPEED_INCREMENT 15
 
 #endif
 
@@ -265,8 +265,8 @@ static void collision_check()
 
     if(ball_player_collision) 
     {
-        ball.speed += SPEED_INCREMENT; // 20
-        player_speed += SPEED_INCREMENT; // 20
+        ball.speed += (BALL_SPEED * 2)/ball.speed * SPEED_INCREMENT; //(ball.speed > BALL_SPEED*3) ? SPEED_INCREMENT/2 : SPEED_INCREMENT; // 20
+        player_speed += (BALL_SPEED * 2)/ball.speed * SPEED_INCREMENT; //(ball.speed > BALL_SPEED*3) ? SPEED_INCREMENT/2 : SPEED_INCREMENT; // 20
     }
     switch(collision_direction)
     {

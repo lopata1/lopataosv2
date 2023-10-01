@@ -87,7 +87,7 @@ text_t make_text(char* content, vector2d_t position, uint8_t color, uint8_t bg_c
 
 uint16_t center_text_x(uint16_t text_length)
 {
-    return (SCREEN_WIDTH - text_length*(CHAR_WIDTH+2)) / 2;
+    return (SCREEN_WIDTH - text_length*(CHAR_WIDTH+3)) / 2;
 }
 
 uint16_t center_y(uint16_t size_y)

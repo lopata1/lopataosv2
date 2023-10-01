@@ -48,18 +48,20 @@ void idt_init() {
     __asm__ volatile ("sti"); // set the interrupt flag
 }
 
-int timer_ms_passed = 0;
+uint32_t timer_ms_passed = 0;
+uint32_t timer_ms_since_boot = 0;
 
 void timer_init()
 {
     outb(0x43, 0b00110110);
 
-    outb(0x40, 1193 && 0xFF);
-    outb(0x40, 1193 && 0xFF00);
+    outb(0x40, 1193 & 0xFF);
+    outb(0x40, 1193 >> 8);
 }
 
 void timer_isr()
 {
+    timer_ms_since_boot++;
     timer_ms_passed++;
     cursor_blink_passed_ms++;
     return;

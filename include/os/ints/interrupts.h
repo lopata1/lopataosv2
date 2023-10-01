@@ -29,6 +29,8 @@ typedef struct {
 
 static idtr_t idtr;
 
-extern int timer_ms_passed;
+extern uint32_t timer_ms_passed;
+extern uint32_t timer_ms_since_boot;
+
 
 #endif

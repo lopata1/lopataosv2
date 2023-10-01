@@ -40,7 +40,7 @@ void poll_events()
         input_pressed = 0;
         prompt_handle_input(last_key_pressed);
     }
-    if(cursor_blink_passed_ms > 500)
+    if(cursor_blink_passed_ms > 200)
     {
         blink_cursor();
         cursor_blink_passed_ms = 0;
