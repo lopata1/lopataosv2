@@ -95,7 +95,7 @@ static void init_snake()
     wall_right = make_rectangle(make_vector2d(SCREEN_WIDTH-10, 0), make_vector2d(10, SCREEN_HEIGHT), 15);
 
     game_over_text1 = make_text("KRAJ IGRE!", make_vector2d(center_text_x(10), 30), 15, 0);
-    game_over_text2 = make_text("BODOVI: 0  ", make_vector2d(center_text_x(11), 50), 15, 0);
+    game_over_text2 = make_text("BODOVI: 000", make_vector2d(center_text_x(11), 50), 15, 0);
     game_over_text3 = make_text("PRITISNITE SPACE DA IGRATE PONOVO", make_vector2d(center_text_x(33), 70), 15, 0);
 }
 
@@ -109,7 +109,6 @@ static void start_new_game()
     increase_snake();
     increase_snake();
     point = make_vector2d(rand(GAME_WIDTH - 1), rand(GAME_HEIGHT - 1));
-    game_over_text2.content = "BODOVI: 0  ";
 }
 
 static void handle_input()
@@ -145,6 +144,9 @@ static void handle_input()
 static void set_game_over()
 {
     game_over = 1;
+    game_over_text2.content[8] = ' ';
+    game_over_text2.content[9] = ' ';
+    game_over_text2.content[10] = ' ';
     int_to_string(snake.size, game_over_text2.content + 8);
 }
 
