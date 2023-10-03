@@ -45,6 +45,10 @@ void prompt_handle_command()
     {
         prints("TEST RADI!\n", 1);
     }
+    else if(streq("POMOC", prompt_input_buffer))
+    {
+        prints("KOMANDE:\nPOMOC - OVA KOMANDA\nCLEAR - CISTI EKRAN\nPONG - IGRA PING-PONG\nSNAKE - IGRA ZMIJA\nTEST3D - TESTIRA 3D GRAFIKU\n\n", 15);
+    }
     else if(streq("CLEAR", prompt_input_buffer))
     {
         fill_screen(background_color);

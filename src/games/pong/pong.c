@@ -7,7 +7,7 @@
 #include <os/math.h>
 
 
-#define QEMU
+//#define QEMU
 
 #ifdef QEMU
 
@@ -145,7 +145,7 @@ static void update_score_text()
 
     for(int i = 2 - length; i < 3; i++)
     {
-        text_start[i] = (score[0] / pow(10, 2-i)) % 10 + '0';
+        text_start[i] = (score[0] / (int)pow(10, 2-i)) % 10 + '0';
     }
 
     length = log10int(score[1]);
@@ -153,7 +153,7 @@ static void update_score_text()
 
     for(int i = 2 - length; i < 3; i++)
     {
-        text_start[i-(2-length)] = (score[1] / pow(10, 2-i)) % 10 + '0';
+        text_start[i-(2-length)] = (score[1] / (int)pow(10, 2-i)) % 10 + '0';
     }
 }
 
@@ -265,8 +265,8 @@ static void collision_check()
 
     if(ball_player_collision) 
     {
-        ball.speed += (BALL_SPEED * 2)/ball.speed * SPEED_INCREMENT; //(ball.speed > BALL_SPEED*3) ? SPEED_INCREMENT/2 : SPEED_INCREMENT; // 20
-        player_speed += (BALL_SPEED * 2)/ball.speed * SPEED_INCREMENT; //(ball.speed > BALL_SPEED*3) ? SPEED_INCREMENT/2 : SPEED_INCREMENT; // 20
+        ball.speed += (ball.speed > BALL_SPEED*3) ? SPEED_INCREMENT/3 : SPEED_INCREMENT;//(BALL_SPEED * 2)/ball.speed * SPEED_INCREMENT; //(ball.speed > BALL_SPEED*3) ? SPEED_INCREMENT/2 : SPEED_INCREMENT; // 20
+        player_speed += (ball.speed > BALL_SPEED*3) ? SPEED_INCREMENT/3 : SPEED_INCREMENT;//(BALL_SPEED * 2)/ball.speed * SPEED_INCREMENT; //(ball.speed > BALL_SPEED*3) ? SPEED_INCREMENT/2 : SPEED_INCREMENT; // 20
     }
     switch(collision_direction)
     {
@@ -302,11 +302,11 @@ static void handle_input()
         {
             player_left.movement = DOWN;
         }
-        else if (last_key_pressed == 'I')
+        else if (last_key_pressed == 17)
         {
             player_right.movement = UP;
         }
-        else if (last_key_pressed == 'K')
+        else if (last_key_pressed == 18)
         {
             player_right.movement = DOWN;
         }
@@ -328,7 +328,7 @@ static void handle_input()
     {
         player_left.movement = IDLE;
     }
-    else if ((last_key_released == 'I' && player_right.movement == UP) || (last_key_released == 'K' && player_right.movement == DOWN))
+    else if ((last_key_released == 17 && player_right.movement == UP) || (last_key_released == 18 && player_right.movement == DOWN))
     {
         player_right.movement = IDLE;
     }

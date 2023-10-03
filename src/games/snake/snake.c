@@ -8,14 +8,14 @@
 #include <stdint.h>
 
 
-#define QEMU
+//#define QEMU
 #ifdef QEMU
 
-#define GAME_SLEEP 100*1.6
+#define GAME_SLEEP 160
 
 #else
 
-#define GAME_SLEEP 100
+#define GAME_SLEEP 160*1.6
 
 #endif
 
@@ -89,10 +89,10 @@ static void init_snake()
 {
     start_new_game();
 
-    wall_top = make_rectangle(make_vector2d(0, 0), make_vector2d(SCREEN_WIDTH, 10), 15);
-    wall_down = make_rectangle(make_vector2d(0, SCREEN_HEIGHT - 10), make_vector2d(SCREEN_WIDTH, 10), 15);
-    wall_left = make_rectangle(make_vector2d(0, 0), make_vector2d(10, SCREEN_HEIGHT), 15);
-    wall_right = make_rectangle(make_vector2d(SCREEN_WIDTH-10, 0), make_vector2d(10, SCREEN_HEIGHT), 15);
+    wall_top = make_rectangle(make_vector2d(0, 0), make_vector2d(SCREEN_WIDTH, 10), 0x68);
+    wall_down = make_rectangle(make_vector2d(0, SCREEN_HEIGHT - 10), make_vector2d(SCREEN_WIDTH, 10), 0x68);
+    wall_left = make_rectangle(make_vector2d(0, 0), make_vector2d(10, SCREEN_HEIGHT), 0x68);
+    wall_right = make_rectangle(make_vector2d(SCREEN_WIDTH-10, 0), make_vector2d(10, SCREEN_HEIGHT), 0x68);
 
     game_over_text1 = make_text("KRAJ IGRE!", make_vector2d(center_text_x(10), 30), 15, 0);
     game_over_text2 = make_text("BODOVI: 0  ", make_vector2d(center_text_x(11), 50), 15, 0);
