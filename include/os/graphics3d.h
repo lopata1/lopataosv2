@@ -2,6 +2,7 @@
 #define _GRAPHICS3D_H_
 
 #include <stdint.h>
+#include <os/graphics.h>
 
 typedef struct {
     float x;
@@ -33,6 +34,19 @@ typedef struct {
     uint16_t size;
 } mesh_t;
 
+typedef struct {
+    mesh_t mesh;
+    vector3d_t position;
+    vector3d_t rotation;
+    vector3d_t scale;
+} object_t;
+
+typedef struct {
+    object_t objects[256];
+    vector3d_t camera;
+    float camera_rotation;
+    int number_of_objects;
+} graphics3d_t;
 
 vector3d_t make_vector3d(float x, float y, float z);
 vector4d_t make_vector4d(float x, float y, float z, float w);;
@@ -48,9 +62,18 @@ vector3d_t cross_vector3d(vector3d_t v1, vector3d_t v2);
 triangle3d_t transform_triangle(triangle3d_t t, matrix3d_t m);
 vector3d_t unit_vector3d(vector3d_t v);
 float dot_vector3d(vector3d_t v1, vector3d_t v2);
+mesh_t move_mesh(mesh_t mesh, vector3d_t move);
+
+void draw_linef(vector2df_t point1, vector2df_t point2, uint8_t color);
+void draw_triangle(vector2d_t p1, vector2d_t p2, vector2d_t p3, float z, uint8_t color);
+
+void init_3d();
+void draw_3d();
 
 extern matrix3d_t rotation_matrix_x;
 extern matrix3d_t rotation_matrix_y;
 extern matrix3d_t rotation_matrix_z;
+extern graphics3d_t graphics3d;
+extern float z_buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 #endif

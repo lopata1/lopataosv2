@@ -13,6 +13,11 @@ uint32_t abs(int32_t n)
     return (mask ^ n) - mask;
 }
 
+double absd(double n)
+{
+    return n < 0 ? -n : n;
+}
+
 double pow(double n, int32_t e)
 {
     if (e == 0)
@@ -57,13 +62,20 @@ void srand(uint32_t seed)
     next = seed;
 }
 
-void int_to_string(uint32_t n, char *destination)
+void int_to_string(int32_t n, char *destination)
 {
-    uint32_t length = log10int(n) + 1;
+    if(n == 0) 
+    {
+        destination[0] = '0';
+        return;
+    }
+    uint32_t length = log10int(abs(n)) + 1;
+
+    if(n < 0) destination++[0] = '-';
 
     for (int i = length - 1; i >= 0; i--)
     {
-        destination[length - i - 1] = (n / (int)pow(10, i)) % 10 + '0';
+        destination[length - i - 1] = (abs(n) / (int)pow(10, i)) % 10 + '0';
     }
 }
 
@@ -163,4 +175,14 @@ double sqrt(double a)
     }
     // find the number on each digit
     return rst;
+}
+
+int max(int a, int b)
+{
+    return a > b ? a : b;
+}
+
+int min(int a, int b)
+{
+    return a < b ? a : b;
 }

@@ -9,7 +9,7 @@ SRC_DIR := src
 BUILD_DIR := build
 BIN_DIR := bin
 
-CSOURCES := kernel.c ints/interrupts.c output.c globals.c prompt.c string.c games/pong/pong.c games/snake/snake.c games/test3d/test3d.c graphics.c graphics3d.c characters.c math.c
+CSOURCES := kernel.c ints/interrupts.c output.c globals.c prompt.c string.c games/pong/pong.c games/snake/snake.c games/test3d/test3d.c graphics.c graphics3d.c characters.c math.c mesh3d.c
 ASMSOURCES := ints/isr_error.asm ints/stubs.asm memory.asm
 
 COBJECTS := $(patsubst %.c, $(BUILD_DIR)/%.o, $(CSOURCES))

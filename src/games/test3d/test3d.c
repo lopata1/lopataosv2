@@ -2,6 +2,8 @@
 #include <os/graphics3d.h>
 #include <os/ints/interrupts.h>
 #include <os/math.h>
+#include <os/memory.h>
+#include <os/mesh3d.h>
 
 
 static float angle = 0;
@@ -14,34 +16,124 @@ static const float z_near = 0.1;
 
 vector3d_t camera = {0, 0, 0};
 
+static float camera_rotation = 0;
+
+static enum MOVEMENT {IDLE, UP, DOWN, LEFT, RIGHT};
+
+static enum MOVEMENT move_x;
+static enum MOVEMENT move_y;
+
+//mesh_t cube;
+
+object_t objects[10];
+
+static text_t debug_text;
+static text_t fps_text;
+
+static int number_of_objects = 9;
+
+static float deltatime = 0;
+static uint16_t fps = 0;
 
 static void draw();
 static void cube_drawing();
 static void new_cube_drawing();
 static vector3d_t project(vector3d_t vector);
+static void handle_input();
+static void handle_logic();
+static void init();
 
 void test3d_start()
 {
+    init_3d();
+    init();
     fov = cos((pi/2)/2)/sin((pi/2)/2);
     while(1)
     {
+        timer_ms_passed = 0;
         if(angle > 2*pi) angle = 0;
         angle += 0.02;
-        
         draw();
-        sleep(17);
+        handle_input();
+        handle_logic();
+
+        deltatime = (float) timer_ms_passed / 1000;
+        fps = 1 / deltatime;
     }
 }
 
+static void handle_logic()
+{
+    memset(debug_text.content, ' ', 12);
+    int_to_string(graphics3d.camera.x, debug_text.content);
+    int_to_string(graphics3d.camera.y, debug_text.content+4);
+    int_to_string(graphics3d.camera.z, debug_text.content+8);
 
+    memset(fps_text.content+5, ' ', 4);
+    int_to_string(fps, fps_text.content+5);
+    if(graphics3d.camera_rotation >= 2*pi || graphics3d.camera_rotation < -pi*2) graphics3d.camera_rotation = 0;
+    if(move_y == UP)
+    {
+        graphics3d.camera = add_vector3d(graphics3d.camera, make_vector3d(-8 * sin(graphics3d.camera_rotation) * deltatime, 0, -8*deltatime * cos(graphics3d.camera_rotation)));
+    }
+    else if(move_y == DOWN)
+    {
+        graphics3d.camera = add_vector3d(graphics3d.camera, make_vector3d(8 * sin(graphics3d.camera_rotation) * deltatime, 0, 8*deltatime * cos(graphics3d.camera_rotation)));
+    }
+    if(move_x == LEFT)
+    {
+        graphics3d.camera = add_vector3d(graphics3d.camera, make_vector3d(8*deltatime * cos(graphics3d.camera_rotation), 0, -8*deltatime * sin(graphics3d.camera_rotation)));
+    }
+    else if(move_x == RIGHT)
+    {
+        graphics3d.camera = add_vector3d(graphics3d.camera, make_vector3d(-8*deltatime * cos(graphics3d.camera_rotation), 0, 8*deltatime * sin(graphics3d.camera_rotation)));
+    }
+
+    graphics3d.objects[0].rotation = make_vector3d(angle, angle, angle);
+}
+
+static void new_new_cube_drawing();
 static void draw()
 {
     clear_buffer(0);
+    for(int i = 0; i < SCREEN_HEIGHT; i++)
+        for(int j = 0; j < SCREEN_WIDTH; j++)
+            z_buffer[i][j] = 99999;
 
-    cube_drawing();
+    //cube_drawing();
     //new_cube_drawing();
+    new_new_cube_drawing();
+    draw_text(debug_text);
+    draw_text(fps_text);
 
     display_buffer();
+}
+
+static void init()
+{
+    debug_text = make_text("            ", make_vector2d(10, 10), 15, 1);
+    fps_text = make_text("FPS:     ", make_vector2d(10, 30), 15, 1);
+
+    //object_t cube_obj = {cube, make_vector3d(3, 2, 5), make_vector2df(0, 0)};
+
+    //graphics3d.objects[0] = cube_obj;
+    //graphics3d.number_of_objects = 4;
+
+    graphics3d.number_of_objects = 3;
+
+    for(int i = 0; i < 1; i++)
+    {
+        object_t cube_obj = {cube, make_vector3d(i, 0, 0), make_vector3d(pi/6, pi/6, 0), make_vector3d(2, 2, 2)};
+        graphics3d.objects[i] = cube_obj;
+    }
+
+    object_t cube_obj = {cube, make_vector3d(5, 0, 0), make_vector3d(0, 0, 0), make_vector3d(10, 2, 2)};
+    graphics3d.objects[1] = cube_obj;
+
+    object_t cube_obj2 = {cube, make_vector3d(0, 2, 0), make_vector3d(50, 0, 50), make_vector3d(100, 1, 100)};
+    //graphics3d.objects[2] = cube_obj2;
+
+    graphics3d.camera.y = 2;
 }
 
 static vector3d_t project(vector3d_t vector)
@@ -68,84 +160,91 @@ static triangle3d_t project_triangle(triangle3d_t t)
     return res;
 }
 
-static void new_cube_drawing()
+
+static void new_new_cube_drawing()
 {
-    mesh_t cube;
-    cube.size = 12;
+    draw_3d();
+}
 
-    cube.triangles[0] = make_triangle3d(make_vector3d(0, 0, 0), make_vector3d(0, 1, 0), make_vector3d(1, 1, 0));
-    cube.triangles[1] = make_triangle3d(make_vector3d(0, 0, 0), make_vector3d(1, 1, 0), make_vector3d(1, 0, 0));
-
-    cube.triangles[2] = make_triangle3d(make_vector3d(1, 0, 0), make_vector3d(1, 1, 0), make_vector3d(1, 1, 1));
-    cube.triangles[3] = make_triangle3d(make_vector3d(1, 0, 0), make_vector3d(1, 1, 1), make_vector3d(1, 0, 1));
-
-    cube.triangles[4] = make_triangle3d(make_vector3d(1, 0, 1), make_vector3d(1, 1, 1), make_vector3d(0, 1, 1));
-    cube.triangles[5] = make_triangle3d(make_vector3d(1, 0, 1), make_vector3d(0, 1, 1), make_vector3d(0, 0, 1));
-
-    cube.triangles[6] = make_triangle3d(make_vector3d(0, 0, 1), make_vector3d(0, 1, 1), make_vector3d(0, 1, 0));
-    cube.triangles[7] = make_triangle3d(make_vector3d(0, 0, 1), make_vector3d(0, 1, 0), make_vector3d(0, 0, 0));
-
-    cube.triangles[8] = make_triangle3d(make_vector3d(0, 1, 0), make_vector3d(0, 1, 1), make_vector3d(1, 1, 1));
-    cube.triangles[9] = make_triangle3d(make_vector3d(0, 1, 0), make_vector3d(1, 1, 1), make_vector3d(1, 1, 0));
-
-    cube.triangles[10] = make_triangle3d(make_vector3d(1, 0, 1), make_vector3d(0, 0, 1), make_vector3d(0, 0, 0));
-    cube.triangles[11] = make_triangle3d(make_vector3d(1, 0, 1), make_vector3d(0, 0, 0), make_vector3d(1, 0, 0));
+/*static void new_cube_drawing()
+{    
 
     matrix3d_t rotation_x = make_matrix3d(make_vector3d(1, 0, 0),
-                                                 make_vector3d(0, cos(angle), -sin(angle)),
-                                                 make_vector3d(0, sin(angle), cos(angle)));
-    matrix3d_t rotation_y = make_matrix3d(make_vector3d(cos(angle), 0, sin(angle)),
+                                                 make_vector3d(0, cos(camera_rotation), -sin(camera_rotation)),
+                                                 make_vector3d(0, sin(camera_rotation), cos(camera_rotation)));
+    matrix3d_t rotation_y = make_matrix3d(make_vector3d(cos(camera_rotation), 0, sin(camera_rotation)),
                                                  make_vector3d(0, 1, 0),
-                                                 make_vector3d(-sin(angle), 0, cos(angle)));
+                                                 make_vector3d(-sin(camera_rotation), 0, cos(camera_rotation)));
 
-    matrix3d_t rotation_z = make_matrix3d(make_vector3d(cos(angle), -sin(angle), 0),
-                                                 make_vector3d(sin(angle), cos(angle), 0),
+    matrix3d_t rotation_z = make_matrix3d(make_vector3d(cos(camera_rotation), -sin(camera_rotation), 0),
+                                                 make_vector3d(sin(camera_rotation), cos(camera_rotation), 0),
                                                  make_vector3d(0, 0, 1));
-
-    for(int i = 0; i < cube.size; i++)
+    for(int i = 0; i < number_of_objects; i++)
     {
-        triangle3d_t rotated = cube.triangles[i];
+        for(int j = 0; j < objects[i].mesh.size; j++)
+        {
 
-        rotated = transform_triangle(rotated, rotation_x);
-        rotated = transform_triangle(rotated, rotation_y);
-        rotated = transform_triangle(rotated, rotation_z);
+            triangle3d_t distanced = objects[i].mesh.triangles[j];
 
-        rotated.points[0].z += 3;
-        rotated.points[1].z += 3;
-        rotated.points[2].z += 3;
+            // -5 0 -5
+            distanced.points[0] = add_vector3d(distanced.points[0], camera);
+            distanced.points[1] = add_vector3d(distanced.points[1], camera);
+            distanced.points[2] = add_vector3d(distanced.points[2], camera);
 
-        vector3d_t normal, line1, line2;
-        line1 = sub_vector3d(rotated.points[1], rotated.points[0]);
-        line2 = sub_vector3d(rotated.points[2], rotated.points[0]);
+            distanced.points[0] = add_vector3d(distanced.points[0], objects[i].position);
+            distanced.points[1] = add_vector3d(distanced.points[1], objects[i].position);
+            distanced.points[2] = add_vector3d(distanced.points[2], objects[i].position);
 
-        normal = cross_vector3d(line1, line2);
+            distanced = transform_triangle(distanced, rotation_y);
 
-        normal = unit_vector3d(normal);
-
-        if(dot_vector3d(normal, sub_vector3d(rotated.points[0], camera)) > 0) continue;  //normal.x * (rotated.points[0].x - camera.x) + normal.y * (rotated.points[0].y - camera.y) + normal.z * (rotated.points[0].z - camera.z) > 0) continue;
+            if(distanced.points[0].z < 0 || distanced.points[1].z < 0 || distanced.points[2].z < 0) continue;
 
 
-        triangle3d_t projected = project_triangle(rotated);
+            triangle3d_t rotated = distanced;
 
-        vector3d_t p1 = projected.points[0];
-        vector3d_t p2 = projected.points[1];
-        vector3d_t p3 = projected.points[2];
+            
 
-        p1.x += 1; p1.y += 1;
-        p2.x += 1; p2.y += 1;
-        p3.x += 1; p3.y += 1;
+            //rotated = transform_triangle(rotated, rotation_x);
+            //rotated = transform_triangle(rotated, rotation_y);
+            //rotated = transform_triangle(rotated, rotation_z);
 
-        p1.x *= 0.5 * SCREEN_WIDTH; p1.y *= 0.5 * SCREEN_HEIGHT;
-        p2.x *= 0.5 * SCREEN_WIDTH; p2.y *= 0.5 * SCREEN_HEIGHT;
-        p3.x *= 0.5 * SCREEN_WIDTH; p3.y *= 0.5 * SCREEN_HEIGHT;
+            //rotated.points[0].z += 5;
+            //rotated.points[1].z += 5;
+            //rotated.points[2].z += 5;
 
-        draw_line(make_vector2d(p1.x, p1.y), make_vector2d(p2.x, p2.y), 15);
-        draw_line(make_vector2d(p2.x, p2.y), make_vector2d(p3.x, p3.y), 15);
-        draw_line(make_vector2d(p1.x, p1.y), make_vector2d(p3.x, p3.y), 15);
+            vector3d_t normal, line1, line2;
+            line1 = sub_vector3d(rotated.points[1], rotated.points[0]);
+            line2 = sub_vector3d(rotated.points[2], rotated.points[0]);
+
+            normal = cross_vector3d(line1, line2);
+
+            normal = unit_vector3d(normal);
+
+            if(dot_vector3d(normal, sub_vector3d(rotated.points[0], make_vector3d(0,0,0))) > 0) continue; //camera)) > 0) continue;  //normal.x * (rotated.points[0].x - camera.x) + normal.y * (rotated.points[0].y - camera.y) + normal.z * (rotated.points[0].z - camera.z) > 0) continue;
+
+
+            triangle3d_t projected = project_triangle(rotated);
+
+            vector3d_t p1 = projected.points[0];
+            vector3d_t p2 = projected.points[1];
+            vector3d_t p3 = projected.points[2];
+
+            p1.x += 1; p1.y += 1;
+            p2.x += 1; p2.y += 1;
+            p3.x += 1; p3.y += 1;
+
+            p1.x *= 0.5 * SCREEN_WIDTH; p1.y *= 0.5 * SCREEN_HEIGHT;
+            p2.x *= 0.5 * SCREEN_WIDTH; p2.y *= 0.5 * SCREEN_HEIGHT;
+            p3.x *= 0.5 * SCREEN_WIDTH; p3.y *= 0.5 * SCREEN_HEIGHT;
+
+            draw_linef(make_vector2df(p1.x, p1.y), make_vector2df(p2.x, p2.y), 15);
+            draw_linef(make_vector2df(p2.x, p2.y), make_vector2df(p3.x, p3.y), 15);
+            draw_linef(make_vector2df(p1.x, p1.y), make_vector2df(p3.x, p3.y), 15);
+        }
     }
 
     
-}
+}*/
 
 
 static void cube_drawing()
@@ -209,4 +308,52 @@ static void cube_drawing()
     draw_line(projected_points[1], projected_points[5], 15);
     draw_line(projected_points[2], projected_points[6], 15);
     draw_line(projected_points[3], projected_points[7], 15);
+}
+
+
+static void handle_input()
+{
+   if(input_pressed)
+    {
+        input_pressed = 0;
+        if(last_key_pressed == 'W')
+        {
+            move_y = UP;
+        }
+        else if (last_key_pressed == 'S')
+        {
+            move_y = DOWN;
+        }
+        else if (last_key_pressed == 'A')
+        {
+            move_x = LEFT;
+        }
+        else if (last_key_pressed == 'D')
+        {
+            move_x = RIGHT;
+        }
+        else if(last_key_pressed == 'Q')
+        {
+            graphics3d.camera_rotation-= 0.1;
+        }
+        else if(last_key_pressed == 'E')
+        {
+            graphics3d.camera_rotation += 0.1;
+        }
+    }
+
+    if(!input_released) return;
+
+    input_released = 0;
+
+    if((last_key_released == 'W' && move_y == UP) || (last_key_released == 'S' && move_y == DOWN))
+    {
+        move_y = IDLE;
+    }
+    else if ((last_key_released == 'A' && move_x == LEFT) || (last_key_released == 'D' && move_x == RIGHT))
+    {
+        move_x = IDLE;
+    }
+    
+    return;
 }

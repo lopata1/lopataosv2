@@ -4,7 +4,7 @@
 #include <os/memory.h>
 #include <os/math.h>
 
-static uint8_t graphics_buffer[200][320];
+uint8_t graphics_buffer[200][320];
 
 void draw_rectangle(rectangle_t rect)
 {
@@ -107,11 +107,15 @@ void draw_line(vector2d_t point1, vector2d_t point2, uint8_t color)
     float yi = (float) dy / steps;
 
     float x = point1.x, y = point1.y;
+
+    if((x < 0 && xi < 0) || (y < 0 && yi < 0)) return;
+
     for(int i = 0; i < steps; i++)
     {
         x += xi;
         y += yi;
-        draw_pixel(make_vector2d((int)x, (int)y), color);
+        if(x < 0 || y < 0 || x >= SCREEN_WIDTH || y >= SCREEN_HEIGHT) continue;
+        draw_pixel(make_vector2d(x, y), color);
     }
 }
 

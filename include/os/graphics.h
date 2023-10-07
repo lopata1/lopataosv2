@@ -5,8 +5,8 @@
 #include <os/globals.h>
 
 typedef struct {
-    uint16_t x;
-    uint16_t y;
+    int16_t x;
+    int16_t y;
 } vector2d_t;
 
 typedef struct {
@@ -41,5 +41,7 @@ uint16_t center_text_x(uint16_t text_length);
 uint16_t center_y(uint16_t size_y);
 void draw_line(vector2d_t point1, vector2d_t point2, uint8_t color);
 void draw_pixel(vector2d_t position, uint8_t color);
+
+extern uint8_t graphics_buffer[200][320];
 
 #endif
