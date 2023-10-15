@@ -127,54 +127,14 @@ float cos(float rads)
     return result;
 }
 
-double sqrt(double a)
-{ /*
-       find more detail of this method on wiki methods_of_computing_square_roots
-
-       *** Babylonian method cannot get exact zero but approximately value of the square_root
-  */
-    double z = a;
-    double rst = 0.0;
-    int max = 5; // to define maximum digit
-    int i;
-    double j = 1.0;
-    for (i = max; i > 0; i--)
+double sqrt(double n)
+{
+    double result = n / 2;
+    for(int i = 1; i < 5; i++)
     {
-        // value must be bigger then 0
-        if (z - ((2 * rst) + (j * pow(10, i))) * (j * pow(10, i)) >= 0)
-        {
-            while (z - ((2 * rst) + (j * pow(10, i))) * (j * pow(10, i)) >= 0)
-            {
-                j++;
-                if (j >= 10)
-                    break;
-            }
-            j--;                                                    // correct the extra value by minus one to j
-            z -= ((2 * rst) + (j * pow(10, i))) * (j * pow(10, i)); // find value of z
-
-            rst += j * pow(10, i); // find sum of a
-
-            j = 1.0;
-        }
+        result = (result + n/result) / 2;
     }
-
-    for (i = 0; i >= 0 - max; i--)
-    {
-        if (z - ((2 * rst) + (j * pow(10, i))) * (j * pow(10, i)) >= 0)
-        {
-            while (z - ((2 * rst) + (j * pow(10, i))) * (j * pow(10, i)) >= 0)
-            {
-                j++;
-            }
-            j--;
-            z -= ((2 * rst) + (j * pow(10, i))) * (j * pow(10, i)); // find value of z
-
-            rst += j * pow(10, i); // find sum of a
-            j = 1.0;
-        }
-    }
-    // find the number on each digit
-    return rst;
+    return result;
 }
 
 int max(int a, int b)
